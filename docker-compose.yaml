@@ -1,0 +1,13 @@
+services:
+  ssd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ssd
+    volumes:
+      - ./Assignments:/home/ssd/
+    tty: true 
+    stdin_open: true
+    environment:
+      - TERM=xterm-256color 
+    entrypoint: ["/bin/bash"]
