@@ -28,7 +28,32 @@ RUN apt-get update && apt-get install -y \
     screen \
     ncurses-term \
     libtinfo5 \
-    tmux
+    tmux \
+    clang
+
+# Install GCC 13.2.0
+RUN wget https://ftp.gnu.org/gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.xz && \
+    tar -xf gcc-13.2.0.tar.xz && \
+    cd gcc-13.2.0 && \
+    ./contrib/download_prerequisites && \
+    mkdir build && cd build && \
+    ../configure --enable-languages=c,c++ --disable-multilib && \
+    make -j$(nproc) && \
+    make install && \
+    cd ../.. && \
+    rm -rf gcc-13.2.0 gcc-13.2.0.tar.xz
+
+
+# Install GLIBC 2.39
+RUN wget https://ftp.gnu.org/gnu/libc/glibc-2.39.tar.xz && \
+    tar -xf glibc-2.39.tar.xz && \
+    cd glibc-2.39 && \
+    mkdir build && cd build && \
+    ../configure --prefix=/usr/local/glibc-2.39 && \
+    make -j$(nproc) && \
+    make install && \
+    cd ../.. && \
+    rm -rf glibc-2.39 glibc-2.39.tar.xz
 
 # Step 4: Install Pwndbg
 RUN git clone https://github.com/pwndbg/pwndbg /opt/pwndbg \
